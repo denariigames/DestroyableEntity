@@ -1,7 +1,7 @@
 {
   "name": "Destroyable Entity",
   "guid": "747d6332-3c21-47ff-a59c-333d7e93d4d8",
-  "packageUrl": "https://github.com/denariigames/DestroyableEntity/raw/refs/heads/master/DestroyableEntity.unitypackage",
+  "packageUrl": "https://raw.githubusercontent.com/denariigames/nightblade-addons/refs/heads/master/DestroyableEntity/package.json",
   "version": "1.0.0",
   "updateDate": "2025-12-31",
   "author": {
