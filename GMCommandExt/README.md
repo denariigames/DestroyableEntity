@@ -2,23 +2,33 @@
 
 <img src="https://github.com/denariigames/BuildingEntityManager/assets/755461/2dbc71dc-9eab-41cf-ac37-9acf43e77cd9" alt="GMCommand-access" height="350">
 
-An addon for NightBlade MMO replaces DefaultGMCommands with an enhanced implementation. 
+An addon for NightBlade MMO replaces default DefaultGMCommands with a more flexible and extensible version, featuring granular access control, easy custom command development, and command logging.
 
-- supports six levels of chat command access control from userLevel column in the userlogin table (0 = everyone, 1 = premium account, 2 = chat moderator, 3 = game moderator, 4 = admin, 5 = superadmin)
-- developers can easily extend and implement their own commands
-- **(New)** command logging by User level
+- **Granular Access Control:** Supports six levels of GMcommand permissions based on the userLevel column in the userlogin table:
+  - 0: Everyone
+  - 1: Premium account
+  - 2: Chat moderator
+  - 3: Game moderator
+  - 4: Admin
+  - 5: Superadmin
+
+- **Easy Extensibility:** Developers can quickly add custom commands using a streamlined plugin pattern.
+
+- **Command Logging:** Logs commands filtered by user level for better moderation and auditing.
 
 ### Usage
 
-1. reference DefaultGMCommandsExt in GameInstance GM Commands.
-2. modify command access on DefaultGMCommandsExt as required.
-3. modify userLevel field in userlogin table as required 
+To integrate GMCommandExt into your NightBlade MMO:
+
+1. in your InitScene, edit the `GameInstance` GameObject and reference `DefaultGMCommandsExt` for GM Commands.
+2. adjust command access levels directly on `DefaultGMCommandsExt` as needed (or make your own).
+3. update the userLevel field in the userlogin table for individual accounts.
 
 ![GMCommandExt-config](https://github.com/denariigames/BuildingEntityManager/assets/755461/043fca0c-9ab8-4880-b57e-ba4d02aa82f2)
 
 ### Logging
 
-Commands can be logged by User Level. The log format is:
+Commands can be logged by User Level to help track usage for security and debugging purposes. The log format is:
 
 `[GMCommandExt] {System.DateTime.Now:yyyy-MM-dd HH:mm:ss}|{command.category}|{sender}|{chatMessage}`
 
@@ -27,8 +37,8 @@ Commands can be logged by User Level. The log format is:
 
 GMCommandExt implements a DevExtMethods plugin pattern. **Version 2.0.0 introduces an entirely new, streamlined pattern for creating commands. Any custom commands from prior versions will need to be modified.**
 
-1. In your own addon, create a new file for a *partial to class GMCommandExt* for each command you wish to implement.
-```
+1.  In your addon project, create a new C# file with a **partial class** extension for `GMCommandExt`:
+```csharp
 using UnityEngine;
 using NightBlade.DevExtension;
 
@@ -40,38 +50,37 @@ namespace NightBlade
 }
 ```
 
-2. Define the default *PlayerLevel* access for the command.
-```
+2. Define the default access level:
+```csharp
 [SerializeField] private PlayerLevel myCommandAccess = PlayerLevel.Admin;
 ```
 
-3. Implement the *RegisterCommand* DevExtMethod.
-```
+3. Register the command using the DevExtMethod:
+```csharp
 [DevExtMethods("RegisterCommand")]
 private void GMCommand__myCommand()
 {
 	AddGMCommand(
-		"my_command", //string that will be recognized as your command, note the prefix slash is not included
-		myCommandAccess, //reference to the PlayerLevel field above
-		"This description is shown in /help my_command", //description of your command
-		"{characterName} {item_id} {optional: amount}", //arguments shown below description of your command
-		"Economy" //category (see below)
+        "my_command",                                      // Command name (without leading slash)
+        myCommandAccess,                                   // Access level reference
+        "This description is shown in /help my_command",   // Command description
+        "{characterName} {item_id} {optional: amount}",    // Argument hints
+        "Economy"                                          // Category
 	);
 }
 ```
 
-4. Implement your command handler method. Note that it is magic-named and the method must follow the naming convention.
-```
-protected string HandleGMCommand__myCommand(string sender, BasePlayerCharacterEntity characterEntity, string[] data)
+4. Implement the command handler method (note the required naming convention with HandleGMCommand followed by two underscores and your command name):
+```csharp
+protected string HandleGMCommand__my_command(string sender, BasePlayerCharacterEntity characterEntity, string[] data)
 {
 	string response = "<color=red>You do not have access to this command</color>";
 
-	//perform any data length checks depending on your arguments
-	if (data.Length == 2)
-	{
-		//perform your command logic and update response
-		response = $"<color=green>Command did the thing</color>";
-	}
+    if (data.Length == 2) // Adjust based on your expected arguments
+    {
+        // Your command logic here
+        response = "<color=green>Command executed successfully!</color>";
+    }
 
 	return response;
 }
@@ -79,7 +88,7 @@ protected string HandleGMCommand__myCommand(string sender, BasePlayerCharacterEn
 
 ### Command Categories
 
-Commands are grouped in categories and the default categories are:
+Commands are organized into categories for better /help output. Default categories include:
 
 - General
 - Moderation
@@ -87,4 +96,4 @@ Commands are grouped in categories and the default categories are:
 - Economy
 - Server
 
-You are free to add your own category name if you want to group your custom commands together.
+Feel free to create custom categories to group your own commands.
