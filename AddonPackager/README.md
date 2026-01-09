@@ -7,7 +7,7 @@
 
 This makes it incredibly easy to share your addons with the NightBlade community.
 
-<img src="https://github.com/denariigames/nightblade-addons/blob/master/AddonPackager/screenshot.png" alt="AddonPackager" height="350">
+<img src="https://github.com/denariigames/nightblade-addons/blob/master/AddonPackager/dist/screenshot.png" alt="AddonPackager" height="350">
 
 ## Features
 
