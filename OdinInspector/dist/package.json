@@ -1,0 +1,14 @@
+{
+  "name": "Odin Inspector",
+  "guid": "3ab1a55a-b78c-4c53-8597-19425873811d",
+  "packageUrl": "https://github.com/denariigames/nightblade-addons/raw/refs/heads/main/OdinInspector/dist/Odin-Inspector.unitypackage",
+  "version": "1.0.0",
+  "updateDate": "2026-01-25",
+  "category": "Integration",
+  "description": "Odin Inspector provides more efficient and enjoyable gamedata editing.\n\nOdin Inspector is a paid addon.\nhttps://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041",
+  "author": {
+    "name": "Denarii Games",
+    "url": "https://x.com/WildMMO"
+  },
+  "screenshot": "screenshot.gif"
+}
